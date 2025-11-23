@@ -1,0 +1,8 @@
+#Seleccionamos al imagen python de dockerHub
+FROM ghcr.io/astral-sh/uv:python3.14-alpine
+
+WORKDIR /Backend
+#Copiamos el archivo requirements a la carpeta de trabajo
+
+EXPOSE 5000
+

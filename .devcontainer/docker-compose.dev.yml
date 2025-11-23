@@ -1,0 +1,47 @@
+name: Gestorix_Dev
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: MySQL
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+    environment:
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: pword
+      MYSQL_ROOT_PASSWORD: pwordR
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - Data-Back
+  backend:
+    build:
+      context: ../Backend
+      dockerfile: Dockerfile.dev
+    container_name: Back_FastAPI
+    mem_limit: 3000mb
+    environment:
+      - name=value
+    volumes:
+      - ../Backend:/Backend
+    networks:
+      - Data-Back
+    
+  # frontend:
+
+
+volumes:
+  mysqldata:
+
+networks:
+  Data-Back:
+    driver: bridge
